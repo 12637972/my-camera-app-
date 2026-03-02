@@ -3,7 +3,7 @@ import requests
 
 # --- تعديل البيانات هنا ---
 # 1. استبدل النص بين العلامات برقم التوكن الذي حصلت عليه من BotFather
-TOKEN = "8622793927:AAGTEaVOusAzcy_CG58TD5ZEl8VuqnMosiQr"
+TOKEN = "8622793927:AAGTEaVOusAzcy_CG58TD5ZEl8VuqnMosiQ"
 
 # 2. استبدل الرقم التالي بالـ Chat ID الذي حصلت عليه من userinfobot
 CHAT_ID ="6284670726"
@@ -40,4 +40,5 @@ if img_file_buffer is not None:
             
     except Exception as e:
         st.error(f"حدث خطأ في الاتصال: {e}")
+
 
